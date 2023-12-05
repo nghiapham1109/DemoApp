@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.model.Product
 import com.example.myapplication.databinding.ProductItemBinding
 
@@ -25,6 +26,12 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Pr
 
         fun bind(product: Product) {
             binding.product = product
+
+            Glide.with(binding.root)
+                .load(product.image)
+                .centerCrop()
+                .into(binding.productImage)
+
             binding.executePendingBindings()
         }
     }
