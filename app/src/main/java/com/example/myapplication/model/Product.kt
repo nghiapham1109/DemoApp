@@ -1,7 +1,7 @@
 package com.example.myapplication.model
 
 data class Product(
-    val id: String,
+    val id: Int,
     val errorDescription: String,
     val name: String,
     val sku: String,

@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.model.Product
 import com.example.myapplication.databinding.ProductItemBinding
+import com.example.myapplication.model.Color
+import com.example.myapplication.model.MappingColor
 
-class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
+class ProductAdapter(private val colorMappings: List<MappingColor>) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
+
+    private var colors: List<Color> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -19,13 +23,17 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Pr
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = getItem(position)
-        holder.bind(product)
+        val colorMapping = colorMappings.firstOrNull { it.id == product.id }
+        val color = colors.firstOrNull { it.id == colorMapping?.id }
+
+        holder.bind(product, color)
     }
 
     class ProductViewHolder(private val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(product: Product) {
+        fun bind(product: Product, color: Color?) {
             binding.product = product
+            binding.color = color
 
             Glide.with(binding.root)
                 .load(product.image)
@@ -44,5 +52,10 @@ class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(Pr
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
+    }
+
+    fun updateColors(newColors: List<Color>) {
+        colors = newColors
+        notifyDataSetChanged()
     }
 }

@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.adapter.ProductAdapter
 import com.example.myapplication.repository.ProductRepository
 import com.example.myapplication.viewModel.ProductViewModel
@@ -21,15 +20,15 @@ class MainActivity : AppCompatActivity() {
         val repository = ProductRepository()
         viewModel = ProductViewModel(repository)
 
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter(emptyList())
         binding.recyclerView.adapter = productAdapter
 
-        viewModel.productList.observe(this) { products ->
+        viewModel.products.observe(this) { products ->
             productAdapter.submitList(products)
         }
 
-        viewModel.fetchProducts()
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        viewModel.colors.observe(this) { colors ->
+            productAdapter.updateColors(colors)
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.myapplication.repository
 
 import android.util.Log
+import com.example.myapplication.model.Color
 import com.example.myapplication.model.Product
 import com.example.myapplication.service.ProductService
 import retrofit2.Retrofit
@@ -22,6 +23,17 @@ class ProductRepository {
             return productsResponse
         } catch (e: Exception) {
             Log.e("ProductRepository", "API call failed: ${e.message}", e)
+            throw e
+        }
+    }
+
+    suspend fun getColors(): ArrayList<Color> {
+        try {
+            val colorResponse = productService.getColor()
+            Log.d("ColorRepository", "API call successful. Response: $colorResponse")
+            return colorResponse
+        } catch (e: Exception) {
+            Log.e("ColorRepository", "API call failed: ${e.message}", e)
             throw e
         }
     }
